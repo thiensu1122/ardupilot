@@ -90,7 +90,11 @@ public:
     int32_t get_alt_above_ground_cm(void);
 
     // pilot input processing
+<<<<<<< HEAD
     void get_pilot_desired_lean_angles(float &roll_out_cd, float &pitch_out_cd, float angle_max_cd, float angle_limit_cd) const;
+=======
+    void get_pilot_desired_lean_angles(float &roll_out, float &pitch_out, float angle_max, float angle_limit) const;
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
     Vector2f get_pilot_desired_velocity(float vel_max) const;
     float get_pilot_desired_yaw_rate(float yaw_in);
     float get_pilot_desired_throttle() const;
@@ -511,7 +515,7 @@ private:
 
     SubMode _mode = SubMode::TAKEOFF;   // controls which auto controller is run
 
-    Location terrain_adjusted_location(const AP_Mission::Mission_Command& cmd) const;
+    bool shift_alt_to_current_alt(Location& target_loc) const;
 
     void do_takeoff(const AP_Mission::Mission_Command& cmd);
     void do_nav_wp(const AP_Mission::Mission_Command& cmd);

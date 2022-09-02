@@ -1,6 +1,16 @@
 # hw definition file for processing by chibios_hwdef.py
 
+<<<<<<< HEAD
 include ../CubeOrange/hwdef.dat
+=======
+# MCU class and specific type
+MCU STM32H7xx STM32H757xx
+
+define CORE_CM7
+define SMPS_PWR
+
+include ../CubeOrange/hwdef.inc
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 
 undef USB_STRING_PRODUCT
 undef USB_STRING_MANUFACTURER

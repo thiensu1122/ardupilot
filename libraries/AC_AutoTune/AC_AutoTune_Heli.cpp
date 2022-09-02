@@ -521,7 +521,11 @@ void AC_AutoTune_Heli::load_test_gains()
 // load gains
 void AC_AutoTune_Heli::load_gain_set(AxisType s_axis, float rate_p, float rate_i, float rate_d, float rate_ff, float angle_p, float max_accel, float rate_fltt, float rate_flte, float smax)
 {
+<<<<<<< HEAD
     switch (axis) {
+=======
+    switch (s_axis) {
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
     case ROLL:
         attitude_control->get_rate_roll_pid().kP(rate_p);
         attitude_control->get_rate_roll_pid().kI(rate_i);

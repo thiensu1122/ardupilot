@@ -74,7 +74,11 @@ public:
     /*
      * return mask of channels that must be disabled because they share a group with a digital channel
      */
+<<<<<<< HEAD
     uint32_t get_disabled_channels(uint32_t digital_mask) override;
+=======
+    uint16_t get_disabled_channels(uint16_t digital_mask) override;
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 
     float scale_esc_to_unity(uint16_t pwm) override {
         return 2.0 * ((float) pwm - _esc_pwm_min) / (_esc_pwm_max - _esc_pwm_min) - 1.0;
@@ -205,8 +209,13 @@ public:
      * The chanmask passed is added (ORed) into any existing mask.
      * The mask uses servo channel numbering
      */
+<<<<<<< HEAD
     void set_reversed_mask(uint32_t chanmask) override;
     uint32_t get_reversed_mask() override { return _reversed_mask << chan_offset; }
+=======
+    void set_reversed_mask(uint16_t chanmask) override;
+    uint16_t get_reversed_mask() override { return _reversed_mask << chan_offset; }
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 
     /*
       mark escs as active for the purpose of sending dshot commands

@@ -258,10 +258,18 @@ void AP_GyroFFT::init(uint16_t loop_rate_hz)
             num_notches = MAX(num_notches, notch.num_dynamic_notches);
         }
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
     if (harmonics == 0) {
         // this allows use of FFT to find peaks with all notch filters disabled
         harmonics = 3;
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
     // count the number of active harmonics or dynamic notchs
     _tracked_peaks = constrain_int16(MAX(__builtin_popcount(harmonics),
                                          num_notches), 1, FrequencyPeak::MAX_TRACKED_PEAKS);
@@ -325,7 +333,7 @@ void AP_GyroFFT::init(uint16_t loop_rate_hz)
 
     // finally we are done
     _initialized = true;
-    update_parameters();
+    update_parameters(true);
     // start running FFTs
     if (start_update_thread()) {
         set_analysis_enabled(true);
@@ -475,10 +483,10 @@ bool AP_GyroFFT::start_analysis() {
 }
 
 // update calculated values of dynamic parameters - runs at 1Hz
-void AP_GyroFFT::update_parameters()
+void AP_GyroFFT::update_parameters(bool force)
 {
     // lock contention is very costly, so don't allow configuration updates while flying
-    if (!_initialized || AP::arming().is_armed()) {
+    if ((!_initialized || AP::arming().is_armed()) && !force) {
         return;
     }
 

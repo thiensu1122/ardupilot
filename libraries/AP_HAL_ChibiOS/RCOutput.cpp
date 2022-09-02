@@ -520,10 +520,17 @@ RCOutput::pwm_group *RCOutput::find_chan(uint8_t chan, uint8_t &group_idx)
 /*
  * return mask of channels that must be disabled because they share a group with a digital channel
  */
+<<<<<<< HEAD
 uint32_t RCOutput::get_disabled_channels(uint32_t digital_mask)
 {
     uint32_t dmask = (digital_mask >> chan_offset);
     uint32_t disabled_chan_mask = 0;
+=======
+uint16_t RCOutput::get_disabled_channels(uint16_t digital_mask)
+{
+    uint16_t dmask = (digital_mask >> chan_offset);
+    uint16_t disabled_chan_mask = 0;
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
     for (auto &group : pwm_group_list) {
         bool digital_group = false;
         for (uint8_t j = 0; j < 4; j++) {
@@ -1405,7 +1412,11 @@ void RCOutput::dshot_send(pwm_group &group, uint32_t time_out_us)
     // assume that we won't be able to get the input capture lock
     group.bdshot.enabled = false;
 
+<<<<<<< HEAD
     uint32_t active_channels = group.ch_mask & group.en_mask;
+=======
+    uint16_t active_channels = group.ch_mask & group.en_mask;
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
     // now grab the input capture lock if we are able, we can only enable bi-dir on a group basis
     if (((_bdshot.mask & active_channels) == active_channels) && group.has_ic()) {
         if (group.has_shared_ic_up_dma()) {
@@ -1470,6 +1481,18 @@ void RCOutput::dshot_send(pwm_group &group, uint32_t time_out_us)
                 // safety is on, don't output anything
                 continue;
             }
+<<<<<<< HEAD
+=======
+
+            uint16_t pwm = period[chan];
+
+            if (pwm == 0) {
+                // no pwm, don't output anything
+                continue;
+            }
+
+            const uint16_t chan_mask = (1U<<chan);
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 
             uint16_t pwm = period[chan];
 

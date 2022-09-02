@@ -109,7 +109,12 @@ COMMON_VEHICLE_DEPENDENT_LIBRARIES = [
     'AP_VideoTX',
     'AP_FETtecOneWire',
     'AP_Torqeedo',
+<<<<<<< HEAD
     'AP_CustomRotations'
+=======
+    'AP_OpenDroneID',
+    'AP_CheckFirmware',
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 ]
 
 def get_legacy_defines(sketch_name, bld):

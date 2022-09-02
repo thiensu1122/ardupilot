@@ -24,6 +24,7 @@
 #include <AP_Filesystem/AP_Filesystem_Available.h>
 #include <AP_GPS/AP_GPS.h>
 #include <AP_OpticalFlow/AP_OpticalFlow.h>
+#include <AP_OpenDroneID/AP_OpenDroneID.h>
 
 #include "ap_message.h"
 

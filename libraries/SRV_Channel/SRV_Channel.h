@@ -525,8 +525,13 @@ public:
     static void push();
 
     // disable PWM output to a set of channels given by a mask. This is used by the AP_BLHeli code
+<<<<<<< HEAD
     static void set_disabled_channel_mask(uint32_t mask) { disabled_mask = mask; }
     static uint32_t get_disabled_channel_mask() { return disabled_mask; }
+=======
+    static void set_disabled_channel_mask(uint16_t mask) { disabled_mask = mask; }
+    static uint16_t get_disabled_channel_mask() { return disabled_mask; }
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 
     // add to mask of outputs which use digital (non-PWM) output and optionally can reverse thrust, such as DShot
     static void set_digital_outputs(uint32_t dig_mask, uint32_t rev_mask);
@@ -611,7 +616,11 @@ private:
 #endif  // AP_FETTEC_ONEWIRE_ENABLED
 
     // mask of disabled channels
+<<<<<<< HEAD
     static uint32_t disabled_mask;
+=======
+    static uint16_t disabled_mask;
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 
     // mask of outputs which use a digital output protocol, not
     // PWM (eg. DShot)

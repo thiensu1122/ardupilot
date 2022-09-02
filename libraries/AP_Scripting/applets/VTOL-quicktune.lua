@@ -13,6 +13,13 @@
  - bail out on a large angle error?
 --]]
 
+<<<<<<< HEAD
+=======
+local MAV_SEVERITY_INFO = 6
+local MAV_SEVERITY_NOTICE = 5
+local MAV_SEVERITY_EMERGENCY = 0
+
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 local PARAM_TABLE_KEY = 8
 local PARAM_TABLE_PREFIX = "QUIK_"
 
@@ -33,9 +40,15 @@ function bind_add_param(name, idx, default_value)
 end
 
 -- setup quicktune specific parameters
+<<<<<<< HEAD
 assert(param:add_table(PARAM_TABLE_KEY, PARAM_TABLE_PREFIX, 10), 'could not add param table')
 
 local QUIK_ENABLE      = bind_add_param('ENABLE',         1, 0)
+=======
+assert(param:add_table(PARAM_TABLE_KEY, PARAM_TABLE_PREFIX, 11), 'could not add param table')
+
+local QUIK_ENABLE      = bind_add_param('ENABLE',         1, 0) 
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 local QUIK_AXES        = bind_add_param('AXES',           2, 7)
 local QUIK_DOUBLE_TIME = bind_add_param('DOUBLE_TIME',    3, 10)
 local QUIK_GAIN_MARGIN = bind_add_param('GAIN_MARGIN',    4, 60)
@@ -45,6 +58,10 @@ local QUIK_YAW_D_MAX   = bind_add_param('YAW_D_MAX',      7, 0.01)
 local QUIK_RP_PI_RATIO = bind_add_param('RP_PI_RATIO',    8, 1.0)
 local QUIK_Y_PI_RATIO  = bind_add_param('Y_PI_RATIO',     9, 10)
 local QUIK_AUTO_FILTER = bind_add_param('AUTO_FILTER',   10, 1)
+<<<<<<< HEAD
+=======
+local QUIK_AUTO_SAVE   = bind_add_param('AUTO_SAVE',     11, 0)
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 
 local INS_GYRO_FILTER  = bind_param("INS_GYRO_FILTER")
 
@@ -71,6 +88,7 @@ local DEFAULT_SMAX = 50.0
 if param:get("Q_A_RAT_RLL_SMAX") then
    is_quadplane = true
    atc_prefix = "Q_A"
+<<<<<<< HEAD
    gcs:send_text(0, "Quicktune for quadplane loaded")
 elseif param:get("ATC_RAT_RLL_SMAX") then
    is_quadplane = false
@@ -81,6 +99,18 @@ else
 end
 
 -- get time in sections since boot
+=======
+   gcs:send_text(MAV_SEVERITY_EMERGENCY, "Quicktune for quadplane loaded")
+elseif param:get("ATC_RAT_RLL_SMAX") then
+   is_quadplane = false
+   gcs:send_text(MAV_SEVERITY_EMERGENCY, "Quicktune for multicopter loaded")
+else
+   gcs:send_text(MAV_SEVERITY_EMERGENCY, "Quicktune unknown vehicle")
+   return
+end
+
+-- get time in seconds since boot
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 function get_time()
    return millis():tofloat() * 0.001
 end
@@ -92,11 +122,20 @@ local stage = stages[1]
 local last_stage_change = get_time()
 local last_gain_report = get_time()
 local last_pilot_input = get_time()
+<<<<<<< HEAD
+=======
+local last_notice = get_time()
+local tune_done_time = nil
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 local slew_parm = nil
 local slew_target = 0
 local slew_delta = 0
 
 local axes_done = {}
+<<<<<<< HEAD
+=======
+local filters_done = {}
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 
 
 -- create params dictionary indexed by name, such as "RLL_P"
@@ -117,6 +156,10 @@ end
 function reset_axes_done()
    for i, axis in ipairs(axis_names) do
       axes_done[axis] = false
+<<<<<<< HEAD
+=======
+      filters_done[axis] = false
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
    end
    stage = stages[1]
 end
@@ -161,6 +204,7 @@ function setup_SMAX()
 end
 
 -- setup filter frequencies
+<<<<<<< HEAD
 function setup_filters()
    if QUIK_AUTO_FILTER:get() <= 0 then
       return
@@ -180,6 +224,21 @@ function setup_filters()
          end
       end
    end
+=======
+function setup_filters(axis)
+   local fltd = axis .. "_FLTD"
+   local fltt = axis .. "_FLTT"
+   local flte = axis .. "_FLTE"
+   adjust_gain(fltt, INS_GYRO_FILTER:get() * FLTT_MUL)
+   adjust_gain(fltd, INS_GYRO_FILTER:get() * FLTD_MUL)
+   if axis == "YAW" then
+      local FLTE = params[flte]
+      if FLTE:get() <= 0.0 or FLTE:get() > YAW_FLTE_MAX then
+         adjust_gain(flte, YAW_FLTE_MAX)
+      end
+   end
+   filters_done[axis] = true
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 end
 
 -- check for pilot input to pause tune
@@ -244,6 +303,10 @@ function advance_stage(axis)
       stage = "P"
    else
       axes_done[axis] = true
+<<<<<<< HEAD
+=======
+      gcs:send_text(5, string.format("Tuning: %s done", axis))
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
       stage = "D"
    end
 end
@@ -314,8 +377,17 @@ function update_slew_gain()
       slew_steps = slew_steps - 1
       logger.write('QUIK','SRate,Gain,Param', 'ffn', get_slew_rate(axis), P:get(), axis .. ax_stage)
       if slew_steps == 0 then
+<<<<<<< HEAD
          gcs:send_text(0, string.format("%s %.4f", slew_parm, P:get()))
          slew_parm = nil
+=======
+         gcs:send_text(MAV_SEVERITY_INFO, string.format("%s %.4f", slew_parm, P:get()))
+         slew_parm = nil
+         if get_current_axis() == nil then
+            gcs:send_text(MAV_SEVERITY_NOTICE, string.format("Tuning: DONE"))
+            tune_done_time = get_time()
+         end
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
       end
    end
 end
@@ -343,6 +415,10 @@ function reached_limit(pname, gain)
 end
 
 -- main update function
+<<<<<<< HEAD
+=======
+local last_warning = get_time()
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 function update()
    if quick_switch == nil then
       quick_switch = rc:find_channel_for_option(300)
@@ -356,12 +432,25 @@ function update()
    end
 
    local sw_pos = quick_switch:get_aux_switch_pos()
+<<<<<<< HEAD
+=======
+   if sw_pos == 1 and (not arming:is_armed() or not vehicle:get_likely_flying()) and get_time() > last_warning + 5 then
+      gcs:send_text(MAV_SEVERITY_EMERGENCY, string.format("Tuning: Must be flying to tune"))
+      last_warning = get_time()
+      return
+   end
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
    if sw_pos == 0 or not arming:is_armed() or not vehicle:get_likely_flying() then
       -- abort, revert parameters
       if need_restore then
          need_restore = false
          restore_all_params()
+<<<<<<< HEAD
          gcs:send_text(0, string.format("Tuning: reverted"))
+=======
+         gcs:send_text(MAV_SEVERITY_EMERGENCY, string.format("Tuning: reverted"))
+         tune_done_time = nil
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
       end
       reset_axes_done()
       return
@@ -371,7 +460,11 @@ function update()
       if need_restore then
          need_restore = false
          save_all_params()
+<<<<<<< HEAD
          gcs:send_text(0, string.format("Tuning: saved"))
+=======
+         gcs:send_text(MAV_SEVERITY_NOTICE, string.format("Tuning: saved"))
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
       end
    end
    if sw_pos ~= 1 then
@@ -385,22 +478,48 @@ function update()
 
    axis = get_current_axis()
    if axis == nil then
+<<<<<<< HEAD
       -- nothing left to do
+=======
+      -- nothing left to do, check autosave time
+      if tune_done_time ~= nil and QUIK_AUTO_SAVE:get() > 0 then
+         if get_time() - tune_done_time > QUIK_AUTO_SAVE:get() then
+            need_restore = false
+            save_all_params()
+            gcs:send_text(MAV_SEVERITY_NOTICE, string.format("Tuning: saved"))
+            tune_done_time = nil
+         end
+      end
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
       return
    end
 
    if not need_restore then
       -- we are just starting tuning, get current values
+<<<<<<< HEAD
       gcs:send_text(0, string.format("Tuning: starting tune"))
       get_all_params()
       setup_SMAX()
       setup_filters()
+=======
+      gcs:send_text(MAV_SEVERITY_NOTICE, string.format("Tuning: starting tune"))
+      get_all_params()
+      setup_SMAX()
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
    end
 
    if get_time() - last_pilot_input < PILOT_INPUT_DELAY then
       return
    end
 
+<<<<<<< HEAD
+=======
+   if not filters_done[axis] then
+      gcs:send_text(MAV_SEVERITY_INFO, string.format("Starting %s tune", axis))
+      setup_filters(axis)
+   end
+
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
    local srate = get_slew_rate(axis)
    local pname = get_pname(axis, stage)
    local P = params[pname]
@@ -422,6 +541,7 @@ function update()
          -- so that we don't trigger P oscillation. We don't drop P by more than a factor of 2
          local ratio = math.max(new_gain / old_gain, 0.5)
          local P_name = string.gsub(pname, "_D", "_P")
+<<<<<<< HEAD
          local I_name = string.gsub(pname, "_D", "_I")
          local old_P = params[P_name]:get()
          local new_P = old_P * ratio
@@ -437,6 +557,18 @@ function update()
       if get_current_axis() == nil then
          gcs:send_text(0, string.format("Tuning: DONE"))
       end
+=======
+         local old_P = params[P_name]:get()
+         local new_P = old_P * ratio
+         gcs:send_text(MAV_SEVERITY_INFO, string.format("adjusting %s %.3f -> %.3f", P_name, old_P, new_P))
+         adjust_gain(P_name, new_P)
+      end
+      setup_slew_gain(pname, new_gain)
+      logger.write('QUIK','SRate,Gain,Param', 'ffn', srate, P:get(), axis .. stage)
+      gcs:send_text(6, string.format("Tuning: %s done", pname))
+      advance_stage(axis)
+      last_stage_change = get_time()
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
    else
       local new_gain = P:get()*get_gain_mul()
       if new_gain <= 0.0001 then
@@ -446,7 +578,11 @@ function update()
       logger.write('QUIK','SRate,Gain,Param', 'ffn', srate, P:get(), axis .. stage)
       if get_time() - last_gain_report > 3 then
          last_gain_report = get_time()
+<<<<<<< HEAD
          gcs:send_text(0, string.format("%s %.4f sr:%.2f", pname, new_gain, srate))
+=======
+         gcs:send_text(MAV_SEVERITY_INFO, string.format("%s %.4f sr:%.2f", pname, new_gain, srate))
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
       end
    end
 end
@@ -457,7 +593,11 @@ end
 function protected_wrapper()
   local success, err = pcall(update)
   if not success then
+<<<<<<< HEAD
      gcs:send_text(0, "Internal Error: " .. err)
+=======
+     gcs:send_text(MAV_SEVERITY_EMERGENCY, "Internal Error: " .. err)
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
      -- when we fault we run the update function again after 1s, slowing it
      -- down a bit so we don't flood the console with errors
      --return protected_wrapper, 1000

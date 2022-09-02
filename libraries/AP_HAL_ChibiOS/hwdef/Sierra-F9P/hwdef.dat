@@ -148,9 +148,12 @@ PC11 SDIO_D3 SDIO
 PB15 SDIO_CK SDIO
 PD2 SDIO_CMD SDIO
 
+<<<<<<< HEAD
 # use the app descriptor needed by MissionPlanner for CAN upload
 env APP_DESCRIPTOR MissionPlanner
 
+=======
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 # reserve 256 bytes for comms between app and bootloader
 RAM_RESERVE_START 256
 

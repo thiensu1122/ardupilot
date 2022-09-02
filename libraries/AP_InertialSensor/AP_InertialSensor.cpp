@@ -895,6 +895,7 @@ AP_InertialSensor::init(uint16_t loop_rate)
     // dynamically, the calculated value is always some multiple of the configured center frequency, so start with the
     // configured value
     for (auto &notch : harmonic_notches) {
+<<<<<<< HEAD
         if (!notch.params.enabled() && !fft_enabled) {
             continue;
         }
@@ -918,6 +919,31 @@ AP_InertialSensor::init(uint16_t loop_rate)
             notch.params.set_default_harmonics(1);
         }
 #endif
+=======
+        if (!notch.params.enabled()) {
+            continue;
+        }
+        notch.calculated_notch_freq_hz[0] = notch.params.center_freq_hz();
+        notch.num_calculated_notch_frequencies = 1;
+        notch.num_dynamic_notches = 1;
+#if APM_BUILD_COPTER_OR_HELI || APM_BUILD_TYPE(APM_BUILD_ArduPlane)
+        if (notch.params.hasOption(HarmonicNotchFilterParams::Options::DynamicHarmonic)) {
+#if HAL_WITH_DSP
+        if (notch.params.tracking_mode() == HarmonicNotchDynamicMode::UpdateGyroFFT) {
+            notch.num_dynamic_notches = AP_HAL::DSP::MAX_TRACKED_PEAKS; // only 3 peaks supported currently
+        } else
+#endif
+        {
+            AP_Motors *motors = AP::motors();
+            if (motors != nullptr) {
+                notch.num_dynamic_notches = __builtin_popcount(motors->get_motor_mask());
+            }
+        }
+        // avoid harmonics unless actually configured by the user
+        notch.params.set_default_harmonics(1);
+        }
+#endif
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
     }
     // count number of used sensors
     uint8_t sensors_used = 0;
@@ -928,7 +954,11 @@ AP_InertialSensor::init(uint16_t loop_rate)
     uint8_t num_filters = 0;
     for (auto &notch : harmonic_notches) {
         // calculate number of notches we might want to use for harmonic notch
+<<<<<<< HEAD
         if (notch.params.enabled() || fft_enabled) {
+=======
+        if (notch.params.enabled()) {
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
             const bool double_notch = notch.params.hasOption(HarmonicNotchFilterParams::Options::DoubleNotch);
             num_filters += __builtin_popcount(notch.params.harmonics())
                 * notch.num_dynamic_notches * (double_notch ? 2 : 1)
@@ -945,7 +975,11 @@ AP_InertialSensor::init(uint16_t loop_rate)
         // only allocate notches for IMUs in use
         if (_use[i]) {
             for (auto &notch : harmonic_notches) {
+<<<<<<< HEAD
                 if (notch.params.enabled() || fft_enabled) {
+=======
+                if (notch.params.enabled()) {
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
                     const bool double_notch = notch.params.hasOption(HarmonicNotchFilterParams::Options::DoubleNotch);
                     notch.filter[i].allocate_filters(notch.num_dynamic_notches,
                                                      notch.params.harmonics(), double_notch);
@@ -1019,6 +1053,10 @@ AP_InertialSensor::detect_backends(void)
         } \
         probe_count++; \
 } while (0)
+
+// support for adding IMUs conditioned on board type
+#define BOARD_MATCH(board_type) AP_BoardConfig::get_board_type()==AP_BoardConfig::board_type
+#define ADD_BACKEND_BOARD_MATCH(board_match, x) do { if (board_match) { ADD_BACKEND(x); } } while(0)
 
 // macro for use by HAL_INS_PROBE_LIST
 #define GET_I2C_DEVICE(bus, address) hal.i2c_mgr->get_device(bus, address)
@@ -2082,6 +2120,7 @@ void AP_InertialSensor::HarmonicNotch::update_frequencies_hz(uint8_t num_freqs, 
     }
     // any uncalculated frequencies will float at the previous value or the initialized freq if none
     num_calculated_notch_frequencies = num_freqs;
+<<<<<<< HEAD
 }
 
 // setup the notch for throttle based tracking, called from FFT based tuning
@@ -2101,6 +2140,8 @@ bool AP_InertialSensor::setup_throttle_gyro_harmonic_notch(float center_freq_hz,
     }
 
     return false;
+=======
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 }
 
 /*

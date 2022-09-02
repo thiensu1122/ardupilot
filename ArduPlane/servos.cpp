@@ -430,8 +430,8 @@ void Plane::throttle_voltage_comp(int8_t &min_throttle, int8_t &max_throttle) co
     const float ratio = g2.fwd_thr_batt_voltage_max / batt_voltage_resting_estimate;
 
     // Scale the throttle limits to prevent subsequent clipping
-    min_throttle = MAX((int8_t)(ratio * (float)min_throttle), -100);
-    max_throttle = MIN((int8_t)(ratio * (float)max_throttle),  100);
+    min_throttle = int8_t(MAX((ratio * (float)min_throttle), -100));
+    max_throttle = int8_t(MIN((ratio * (float)max_throttle),  100));
 
     SRV_Channels::set_output_scaled(SRV_Channel::k_throttle,
                                         constrain_float(SRV_Channels::get_output_scaled(SRV_Channel::k_throttle) * ratio, -100, 100));
@@ -886,6 +886,8 @@ void Plane::set_servos(void)
     // slew rate limit throttle
     throttle_slew_limit(SRV_Channel::k_throttle);
 
+    const float base_throttle = SRV_Channels::get_output_scaled(SRV_Channel::k_throttle);
+
     if (!arming.is_armed()) {
         //Some ESCs get noisy (beep error msgs) if PWM == 0.
         //This little segment aims to avoid this.
@@ -912,9 +914,16 @@ void Plane::set_servos(void)
     }
 
     float override_pct = SRV_Channels::get_output_scaled(SRV_Channel::k_throttle);
+<<<<<<< HEAD
     if (g2.ice_control.throttle_override(override_pct)) {
+=======
+    if (g2.ice_control.throttle_override(override_pct, base_throttle)) {
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
         // the ICE controller wants to override the throttle for starting, idle, or redline
         SRV_Channels::set_output_scaled(SRV_Channel::k_throttle, override_pct);
+#if HAL_QUADPLANE_ENABLED
+        quadplane.vel_forward.integrator = 0;
+#endif
     }
 
     // run output mixer and send values to the hal for output

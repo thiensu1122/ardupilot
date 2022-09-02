@@ -29,11 +29,12 @@ jobs:
             revo-mini,
             MatekF405-Wing,
             configure-all
+            CubeOrange-ODID,
         ]
         toolchain: [
             chibios,  # GCC-6
-            #chibios-clang,
         ]
+<<<<<<< HEAD
         gcc: [6, 10]
         exclude:
           - gcc: 10
@@ -46,6 +47,9 @@ jobs:
             config: MatekF405-Wing
           - gcc: 6
             config: periph-build
+=======
+        gcc: [10]
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
         include:
           - config: stm32h7
             toolchain: chibios-py2

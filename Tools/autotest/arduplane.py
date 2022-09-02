@@ -1692,6 +1692,7 @@ class AutoTestPlane(AutoTest):
         self.progress("Ensure no AIRSPEED_AUTOCAL on ground")
         self.set_parameters({
             "ARSPD_AUTOCAL": 1,
+<<<<<<< HEAD
             "ARSPD_PIN": 2,
             "ARSPD_RATIO": 0,
             "ARSPD2_RATIO": 4,
@@ -1711,6 +1712,15 @@ class AutoTestPlane(AutoTest):
         self.wait_statustext('Airspeed 1 calibrated', check_context=True, timeout=30)
         self.wait_statustext('Airspeed 2 calibrated', check_context=True)
 
+=======
+            "RTL_AUTOLAND": 1,
+        })
+        m = self.mav.recv_match(type='AIRSPEED_AUTOCAL',
+                                blocking=True,
+                                timeout=5)
+        if m is not None:
+            raise NotAchievedException("Got autocal on ground")
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
         mission_filepath = "flaps.txt"
         self.load_mission(mission_filepath)
         self.wait_ready_to_arm()

@@ -171,8 +171,17 @@ AP_HW_CUBERED                        1069
 AP_HW_CUBERED_IO                     1070
 AP_HW_GreenSight_UltraBlue           1071
 AP_HW_GreenSight_microBlue           1072
+<<<<<<< HEAD
+=======
+AP_HW_MAMBAH743_V4                   1073
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 
 AP_HW_CUBEORANGE_PERIPH              1400
 AP_HW_CUBEBLACK_PERIPH               1401
 AP_HW_PIXRACER_PERIPH                1402
 AP_HW_SWBOOMBOARD_PERIPH             1403
+
+# OpenDroneID enabled boards. Use 10000 + the base board ID
+AP_HW_CubeOrange_ODID               10140
+AP_HW_Pixhawk6_ODID                 10053
+

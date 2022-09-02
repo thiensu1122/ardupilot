@@ -141,14 +141,24 @@ void AP_Avoidance_Plane::handle_recovery(RecoveryAction recovery_action)
                     // let ModeAvoidADSB continue in its guided
                     // behaviour, but reset the loiter location,
                     // rather than where the avoidance location was
+<<<<<<< HEAD
                     plane.set_guided_WP(plane.current_loc);
+=======
+                    plane.guided_WP_loc = plane.current_loc;
+                    plane.set_guided_WP();
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
                 }
                 break;
 
             default:
                 // user has specified an invalid recovery action;
                 // loiter where we are
+<<<<<<< HEAD
                 plane.set_guided_WP(plane.current_loc);
+=======
+                plane.guided_WP_loc = plane.current_loc;
+                plane.set_guided_WP();
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
                 break;
             } // switch
         }

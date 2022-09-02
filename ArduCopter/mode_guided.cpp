@@ -112,6 +112,11 @@ bool ModeGuided::allows_arming(AP_Arming::Method method) const
 // takeoff_alt_cm is interpreted as alt-above-home (in cm) or alt-above-terrain if a rangefinder is available
 bool ModeGuided::do_user_takeoff_start(float takeoff_alt_cm)
 {
+<<<<<<< HEAD
+=======
+    guided_mode = SubMode::TakeOff;
+
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
     // calculate target altitude and frame (either alt-above-ekf-origin or alt-above-terrain)
     int32_t alt_target_cm;
     bool alt_target_terrain = false;

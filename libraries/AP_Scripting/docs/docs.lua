@@ -1395,6 +1395,14 @@ function vehicle:set_velocity_match(param1) end
 ---@return boolean
 function vehicle:nav_scripting_enable(param1) end
 
+<<<<<<< HEAD
+=======
+-- desc sets autopilot nav speed (Copter and Rover)
+---@param param1 number
+---@return boolean
+function vehicle:set_desired_speed(param1) end
+
+>>>>>>> 2172cfb39ad8f0bcdcd343d74512414f7cb1f6a6
 -- desc
 ---@param param1 number
 ---@param param2 number

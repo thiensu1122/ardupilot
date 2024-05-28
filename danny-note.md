@@ -1,21 +1,34 @@
 1) instruction https://github.com/HefnySco/OBAL/wiki/06---Build-and-Install
 2) download https://sourceforge.net/projects/raspberry-pi-cross-compilers/files/Raspberry%20Pi%20GCC%20Cross-Compiler%20Toolchains/Buster/GCC%2010.2.0/Raspberry%20Pi%201%2C%20Zero/
 3) build
+
+```
 cd ~/work/ardupilot/
+github apply danny.patch
 ./waf configure --toolchain=/home/bao/Downloads/cross-pi-gcc-10.2.0-0/bin/arm-linux-gnueabihf --board obal
 ./waf copter
-  
+```
 4) Deploy Binary
 Copy ardupilot binary to /home/pi .
 Create empty file /home/pi/ardupilot.parm using touch /home/pi/ardupilot.parm you can add any initialization parameters to this file. For example for Quadcopter X configuration:
-create ardupilot.parm with the following data.
-
+create `ardupilot.parm` with the following data.
+```
 SYSID_THISMAV    1
 
 FRAME_CLASS 1
 
 FRAME_TYPE  1
-
+```
 5) Run ArduPilot
 ArduCopter: sudo /home/pi/arducopter (plus parameter)
 
+6) run sitl (simulation)
+```
+cd ~/work/ardupilot/
+./waf clean 
+./waf configure --board sitl
+./waf sitl
+cd ArduCopter
+../Tools/autotest/sim_vehicle.py --map --console --no-mavproxy --instance 1
+
+```

@@ -1,0 +1,55 @@
+diff --git a/libraries/AP_HAL/board/linux.h b/libraries/AP_HAL/board/linux.h
+index 9a83d781e7..783d53fec2 100644
+--- a/libraries/AP_HAL/board/linux.h
++++ b/libraries/AP_HAL/board/linux.h
+@@ -309,7 +309,7 @@
+ 
+         #define HAL_INS_PROBE_LIST PROBE_IMU_SPI(Invensense, "mpu9250", ROTATION_NONE)
+         #define HAL_MAG_PROBE_LIST PROBE_MAG_IMU(AK8963, mpu9250, 0, ROTATION_NONE)
+-        #define HAL_BARO_PROBE_LIST PROBE_BARO_I2C(BMP085, 1, 0x77) 
++        #define HAL_BARO_PROBE_LIST PROBE_BARO_SPI(BMP280, "bmp280")
+         //#define HAL_MAG_PROBE_LIST PROBE_MAG_I2C(QMC5883L, 1, 0x0d,true ,  ROTATION_NONE)
+ 
+         #define HAL_PROBE_EXTERNAL_I2C_COMPASSES
+diff --git a/libraries/AP_HAL_Linux/RCInput_RPI.cpp b/libraries/AP_HAL_Linux/RCInput_RPI.cpp
+index d34dbafe2d..7a0d852001 100644
+--- a/libraries/AP_HAL_Linux/RCInput_RPI.cpp
++++ b/libraries/AP_HAL_Linux/RCInput_RPI.cpp
+@@ -55,9 +55,7 @@ static uint16_t RcChnGpioTbl[RCIN_RPI_CHN_NUM] = {
+ #define RCIN_RPI_SIG_HIGH        0
+ #define RCIN_RPI_SIG_LOW         1
+ static uint16_t RcChnGpioTbl[RCIN_RPI_CHN_NUM] = {
+-    RPI_GPIO_<5>(),  RPI_GPIO_<6>(),  RPI_GPIO_<13>(),
+-    RPI_GPIO_<19>(), RPI_GPIO_<26>(), RPI_GPIO_<21>(), 
+-    RPI_GPIO_<20>(), RPI_GPIO_<16>()
++    RPI_GPIO_<5>()
+ };
+ #else
+ #define RCIN_RPI_SIG_HIGH        1
+diff --git a/libraries/AP_HAL_Linux/RCInput_RPI.h b/libraries/AP_HAL_Linux/RCInput_RPI.h
+index 68121d4894..2828ccb4fe 100644
+--- a/libraries/AP_HAL_Linux/RCInput_RPI.h
++++ b/libraries/AP_HAL_Linux/RCInput_RPI.h
+@@ -23,7 +23,7 @@
+ #if CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_BH
+ #define RCIN_RPI_CHN_NUM 8
+ #elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_OBAL_V1
+-#define RCIN_RPI_CHN_NUM 8
++#define RCIN_RPI_CHN_NUM 1
+ #else
+ #define RCIN_RPI_CHN_NUM 1
+ #endif
+diff --git a/libraries/AP_HAL_Linux/SPIDevice.cpp b/libraries/AP_HAL_Linux/SPIDevice.cpp
+index 4d3e922561..f6c91d5645 100644
+--- a/libraries/AP_HAL_Linux/SPIDevice.cpp
++++ b/libraries/AP_HAL_Linux/SPIDevice.cpp
+@@ -148,7 +148,8 @@ SPIDesc SPIDeviceManager::_device[] = {
+ #elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_OBAL_V1 && \
+     defined (HAL_BOARD_SUBTYPE_LINUX_OBAL_V1_MPU_9250_SPI)
+ SPIDesc SPIDeviceManager::_device[] = {
+-    SPIDesc("mpu9250",    0, 0, SPI_MODE_3, 8, SPI_CS_KERNEL,  1*MHZ, 10*MHZ),
++    SPIDesc("mpu9250",    0, 0, SPI_MODE_3, 8, SPI_CS_KERNEL,  1*MHZ, 11*MHZ),
++    SPIDesc("bmp280",     0, 1, SPI_MODE_3, 8, SPI_CS_KERNEL,  10*MHZ,10*MHZ),
+ };
+ #else
+ // empty device table
